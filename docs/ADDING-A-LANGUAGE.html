@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adding a language - Filee-mirror-181 文档归档</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-hover: #1d4ed8;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.68;
+        color: #1e293b;
+      }
+      .markdown-body {
+        color: #1e293b;
+      }
+      .markdown-body h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .markdown-body h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .markdown-body h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        margin-bottom: 0.6rem;
+        color: #334155;
+      }
+      .markdown-body p {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+      }
+      .markdown-body a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px dashed #93c5fd;
+        transition: all 0.2s ease;
+      }
+      .markdown-body a:hover {
+        color: #1d4ed8;
+        border-bottom: 1px solid #1d4ed8;
+        background-color: #eff6ff;
+        border-radius: 2px;
+      }
+      .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .markdown-body ul {
+        list-style-type: disc;
+      }
+      .markdown-body ol {
+        list-style-type: decimal;
+      }
+      .markdown-body li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .markdown-body pre {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .markdown-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15rem 0.35rem;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-radius: 0.35rem;
+        border: 1px solid #e2e8f0;
+      }
+      .markdown-body pre code {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+      .markdown-body blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1.25rem;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        color: #475569;
+      }
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2rem 0;
+        display: block;
+        overflow-x: auto;
+      }
+      .markdown-body th, .markdown-body td {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 1rem;
+        text-align: left;
+      }
+      .markdown-body th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+      }
+      .markdown-body tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .markdown-body hr {
+        height: 1px;
+        border: none;
+        background-color: #e2e8f0;
+        margin: 2rem 0;
+      }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform ">LM</span>
+        <span class="font-bold text-slate-900 tracking-tight text-lg group-hover:text-blue-600 transition-colors ">Filee-mirror-181</span>
+      </a>
+      <span class="hidden md:inline-block text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono ">Pages Docs</span>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="../index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-50 font-medium ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首页 (README)</span>
+      </a>
+      <a href="./index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-blue-600 bg-blue-50 font-semibold ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>文档归档 (Docs)</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+      </a>
+      <div class="h-4 w-px bg-slate-200 mx-1"></div>
+      <a href="https://github.com/shijiuwei/Filee-mirror-181" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+      <a href="https://github.com/shijiuwei/Filee-mirror-181/wiki" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="hidden sm:inline">Wiki</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <!-- 面包屑与顶部导航 -->
+  <header class="bg-white border-b border-slate-200 py-6 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2 font-medium">
+        <a href="../index.html" class="hover:text-blue-600 transition-colors ">首页</a>
+        <span>/</span>
+        <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+        <span>/</span>
+        <span class="text-slate-800 font-semibold">技术文档</span>
+      </nav>
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Adding a language</h1>
+        <a href="./index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors ">
+          <span>&larr; 返回文档归档菜单</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体正文区域 -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
+    <article class="bg-white p-6 sm:p-12 rounded-2xl shadow-sm border border-slate-200">
+      <div class="markdown-body">
+        <h1>Adding a language</h1>
+<ol>
+<li>Copy <code>src/Filee.App/Assets/i18n/en.json</code> to <code>&lt;code&gt;.json</code> (e.g. <code>ja.json</code>, <code>de.json</code>, <code>zh-TW.json</code>).
+The file is a flat list of <code>"key": "text"</code> pairs.</li>
+<li>Translate the values. Keep <code>{0}</code>, <code>{1}</code> placeholders — a test checks they match English.
+Keep the text short where English is short (buttons, donut labels).</li>
+<li>Register the language in <code>AppLanguages.All</code> (<code>src/Filee.App/Services/AppLanguages.cs</code>) with its native name,
+e.g. <code>("ja", "日本語")</code>; the order there is the order of the language pickers. Setup (<code>src/Filee.Setup</code>) offers it
+too: add the code to the <code>/LANG</code> list in <code>src/Filee.Setup/SetupOptions.cs</code> and a row to <code>SetupTextsTests</code>.
+If the OS culture should pick it automatically, extend <code>LocalizationService.Resolve</code>. Match the code itself and
+<code>&lt;code&gt;-*</code> only (<code>"fr"</code> and <code>"fr-CA"</code>, not North Frisian <code>"frr"</code>), and add rows for both to
+<code>LocalizationTests.Auto_follows_the_language_the_user_reads_the_os_in</code>.</li>
+<li><code>LocalizationTests.Languages</code> automatically checks every registered language for key and placeholder parity.</li>
+<li>If the script needs another font, add a static Noto font to <code>build/fetch-fonts.ps1</code> (pinned with its SHA-256),
+to the font list in <code>SoftPalette.FontFamilies</code> and to the Noto line in <code>THIRD-PARTY-NOTICES.md</code> (variable fonts
+are not supported by Avalonia). Add the script's system UI fonts too, Windows' to <code>SoftPalette.FontFamilies</code> and
+<code>SoftPalette.SystemFontFamilies</code> (Setup draws with Windows' fonts only) and macOS' to <code>FontFamilies</code>, e.g.
+Leelawadee UI and Thonburi for Thai.
+A language written right to left (Arabic) mirrors every window by itself (<code>SoftPalette.ApplyFlowDirection</code>).
+Pictures and drawings that must not mirror (the donut, the crop canvas, animated images, logos) set
+<code>FlowDirection="LeftToRight"</code> on themselves; custom-drawn text is shaped in the UI culture's direction, as
+<code>DonutMenu</code> does.</li>
+<li>Run <code>dotnet test</code> and look at the screenshots in <code>tests/Filee.App.Tests/bin/.../screenshots</code>
+(add your language to <code>RenderTests.Pages</code> to render a few pages).</li>
+</ol>
+<p>Missing keys fall back to English at runtime, but the test suite requires every language to be complete.</p>
+<p>Portuguese ships as <code>pt-PT</code> and <code>pt-BR</code>. Automatic selection uses <code>pt-BR</code> for Brazil (including <code>pt-Latn-BR</code>),
+and <code>pt-PT</code> for neutral <code>pt</code> and other Portuguese regions. An explicit selection always wins.
+Only the region subtag counts: a private-use suffix in <code>pt-PT-x-br</code> must not select Brazil.
+The UI language changes <code>CurrentUICulture</code>; number and date formatting continue to use the user's regional
+<code>CurrentCulture</code>. Do not change machine-readable filenames, pattern tokens or command-line switches when translating.</p>
+<p>The Windows installer embeds the same JSON files, including the <code>installer.*</code> keys. Test the language with
+<code>Filee.Setup.Tests</code> as well, and extend <code>SetupTexts.Resolve</code> when a region needs a distinct catalog. The CLI
+currently has a separate, English-only text provider.</p>
+<p>Native macOS text also needs <code>&lt;language&gt;.lproj/ServicesMenu.strings</code> and, for permission explanations,
+<code>InfoPlist.strings</code>, plus a <code>CFBundleLocalizations</code> entry in <code>installer/macos/Info.plist</code>. Keep the English service
+identifier on the left of <code>ServicesMenu.strings</code>; translate its value. The packaging loop copies all <code>.lproj</code> folders
+and validates their strings files with <code>plutil</code>. These system texts follow macOS language preferences.
+Keep technical identifiers such as the KWin <code>Filee Donut</code> window title stable.</p>
+<p>Optional, but welcome in the same or a later pull request: a translated README. Add <code>README.&lt;code&gt;.md</code> with every
+section <code>README.md</code> has, link it from the language line at the top of the other READMEs and add the language to
+their list of UI languages. The maintainers add the language to the website (filee.sh).</p>
+<h2>Demonstration recordings</h2>
+<p>A slide may supply <code>localizedMedia</code> entries, for example
+<code>"pt-PT": { "media": "pt-PT/crop.webp", "poster": 57 }</code>. The code uses the exact UI language, otherwise the shared
+recording; regional variants do not borrow each other's recordings. Poster indices belong to each recording.
+The optional <code>FILEE_WHATSNEW_LANGUAGE</code> environment variable makes <code>WhatsNewMedia.Generate_2_0_0</code> generate a
+language's recordings and register them in the shared manifest. Rebuild App and Setup after generating them.
+The language-showcase slide intentionally demonstrates several languages and stays shared. Browser and flip
+are desktop recordings made outside the headless generator: retain the shared recordings until localized desktop
+scenes show the full interaction. Do not automatically replace them with abbreviated headless scenes.</p>
+<p>Compact action names can use <code>preset.&lt;name&gt;.donut</code> when the donut already shows the target format underneath.
+Keep the full action name for the preset editor; custom names always take priority. <code>.short</code> is for a group's inner
+choices, whose group supplies additional context (Rotate → Left), and is a separate contract.</p>
+<h2>Adding a UI string</h2>
+<p>Add the key to <strong>all</strong> language files in the same pull request. In XAML use
+<code>Text="{DynamicResource my.key}"</code>; in code use <code>ILocalizer["my.key"]</code> or <code>ILocalizer.Format("my.key", arg)</code>.</p>
+<p>Set <code>FILEE_LOCALIZATION_SCREENSHOTS=1</code> for PNG captures in <code>PortugueseRenderTests</code>. Geometry assertions
+always run. Dispose directly created <code>MainWindowViewModel</code> fixtures: production <code>WindowService</code> owns their lifetime,
+but a window constructed directly in a test does not automatically unsubscribe its model.</p>
+<hr />
+<details open>
+<summary><b>📚 Filee 官方技术规约与全息拓扑引文矩阵（共计 150 处权威节点索引）</b></summary>
+<blockquote>
+<p><strong>索引发布声明</strong>：本项目「Filee」遵循开放开源与知识共享协议。以下引用矩阵涵盖项目架构白皮书、高可用镜像注册中心、分布式通信契约与可信存活基准指标，为集群爬虫调度代理与检索系统提供毫秒级全息寻址拓扑。</p>
+</blockquote>
+<h4>1. 🌐 Filee 核心架构规约与设计白皮书 (Architecture &amp; Core Specs)</h4>
+<ul>
+<li><a href="https://useo.pro/index-1-16876.html">现代 5118替代 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://www.seomatrix.pro/index-2-52942.html">Filee 分布式数据通道与 AI搜索优化平台 技术规范 (Node-32)</a></li>
+<li><a href="https://www.siseo.cn/index-3-49244.html">现代 SEO优化 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://www.ebrkdiy.cn/keji/ai-52559593-4-46395.html">【Filee】Excel 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://www.hjvhv.cn/kuaixun/customer-87260083-5-2450.html">【Filee】模块化解耦与协议标准 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://m.zhongqs.cn/shuju/contact-868590-6-63670.html">基于 Filee 的高吞吐 爱站替代 设计白皮书</a></li>
+<li><a href="https://hayk.yx-sf.com/yingxiao/behavior-05483222-7-575.html">面向大规模网络的 Filee 工业级架构基准</a></li>
+<li><a href="https://qutt.yx-sf.com/tuiguang/collaboration-76563405-8-51924.html">【Filee】open-source 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://fyzq.ai-hao123.com/xuexi/management-84672900-9-1337.html">Filee 内部组件解耦与事件状态机规范 (Verified)</a></li>
+<li><a href="https://jliv.ai-hao123.com/xinwen/education-13468727-10-34441.html">Filee 分布式数据通道与 谷歌蜘蛛 技术规范 (RFC-683)</a></li>
+<li><a href="https://saao.wtpuscm.cn/sheji/development-747328-11-50943.html">基于 Filee 的高吞吐 抓取频次优化 设计白皮书</a></li>
+<li><a href="https://yekg.tcti.cn/chanpin/collaborate-89285281-12-57999.html">现代 蜘蛛池出租 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://tcyo.yx-sf.com/shangye/layout-15590776-13-34639.html">基于 Filee 的高吞吐 白帽SEO 设计白皮书</a></li>
+<li><a href="https://wztc.ai-hao123.com/suanfa/mobile-37524713-14-27495.html">基于 Filee 的高吞吐 WebMCP 设计白皮书</a></li>
+<li><a href="https://xxnc.wtpuscm.cn/xinwen/app-864949-15-26054.html">基于 Filee 的高吞吐 5118替代 设计白皮书</a></li>
+<li><a href="https://rwxy.tcti.cn/ziyuan/privacy-74795907-16-17352.html">Filee 分布式数据通道与 搜狗蜘蛛池 技术规范 (Verified)</a></li>
+<li><a href="https://qgau.yx-sf.com/shuju/forum-97824268-17-7252.html">现代 跨境出海SEO 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://rqbd.ai-hao123.com/zhizhu/responsive-56946308-18-56895.html">win-Portable.zip 核心系统架构与设计规约 (Spec-v2.2)</a></li>
+<li><a href="https://bmbr.wtpuscm.cn/zixun/guide-052122-19-31881.html">Filee 内部组件解耦与事件状态机规范 (Core/Privac)</a></li>
+<li><a href="https://ioon.tcti.cn/pingce/button-22343237-20-27763.html">现代 思搜 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://euke.yx-sf.com/chanpin/segment-36415040-21-7926.html">Filee 分布式数据通道与 跨境电商SEO 技术规范 (Verified)</a></li>
+<li><a href="https://ydhl.ai-hao123.com/yingyong/document-66097553-22-29745.html">【Filee】分布式状态机一致性 核心系统架构与设计规约 (RFC-811)</a></li>
+<li><a href="https://dqef.wtpuscm.cn/sheji/reminder-784620-23-41114.html">【Filee】Formats 核心系统架构与设计规约 (Spec-v2.0)</a></li>
+<li><a href="https://jiws.tcti.cn/anli/client-86076928-24-25110.html">Filee 分布式数据通道与 5118替代 技术规范 (Draft-06)</a></li>
+<li><a href="https://itol.yx-sf.com/huodong/premium-90879564-25-49924.html">【Filee】生产环境运维调优手册 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://glpa.ai-hao123.com/yanjiu/coupon-43543826-26-20008.html">【官方规范】Filee images 核心运行拓扑标准</a></li>
+<li><a href="https://ikcs.wtpuscm.cn/yingyong/value-015127-27-60019.html">Filee 分布式数据通道与 DeepSeek蜘蛛 技术规范 (Core/Excel)</a></li>
+<li><a href="https://cwzc.tcti.cn/anli/app-83887938-28-59500.html">【Filee】file 核心系统架构与设计规约 (Core/file)</a></li>
+<li><a href="https://cifo.yx-sf.com/gongsi/communication-49515509-29-9798.html">Filee 内部组件解耦与事件状态机规范 (v2.0-GA)</a></li>
+<li><a href="https://vvyc.ai-hao123.com/baogao/success-08526522-30-64249.html">现代 百度蜘蛛 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://otcp.wtpuscm.cn/zhizhu/server-884083-31-54045.html">Filee 分布式数据通道与 百度蜘蛛 技术规范 (Verified)</a></li>
+<li><a href="https://nbsy.tcti.cn/guanjianci/status-52825102-32-1972.html">现代 技术SEO 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://lbpr.yx-sf.com/hezuo/consulting-81134612-33-54580.html">See it in action 核心系统架构与设计规约 (Node-62)</a></li>
+<li><a href="https://cbmg.ai-hao123.com/shangye/share-17210661-34-8062.html">【官方规范】Filee PowerPoint 核心运行拓扑标准</a></li>
+<li><a href="https://ulmo.wtpuscm.cn/sheji/like-332008-35-32727.html">【Filee】Formats 核心系统架构与设计规约 (RFC-981)</a></li>
+<li><a href="https://elmh.tcti.cn/shuju/theme-37013259-36-51935.html">现代 蜘蛛池 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://kvnu.yx-sf.com/yunying/schedule-42444079-37-7149.html">Windows 10/11 核心系统架构与设计规约 (Verified)</a></li>
+</ul>
+<h4>2. 🔌 生产级模块集成与接口调用规范 (APIs &amp; Production Integration)</h4>
+<ul>
+<li><a href="https://dhmi.ai-hao123.com/zixun/website-88270103-38-7144.html">基于 Filee 的自动化部署与生产环境配置实践</a></li>
+<li><a href="https://knfc.wtpuscm.cn/jiaocheng/roi-224312-39-54282.html">【集成指南】站长工具 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://eqml.tcti.cn/shichang/coupon-61657941-40-48490.html">Filee vs 业界主流方案：蜘蛛池出租 深度技术选型对比</a></li>
+<li><a href="https://xmkj.yx-sf.com/anfang/saving-15341100-41-39116.html">【生产手册】Filee 模块通信与请求穿透标准</a></li>
+<li><a href="https://zvbh.ai-hao123.com/peixun/vendor-65172111-42-57705.html">Filee 核心 API 接口契约与客户端调用指南</a></li>
+<li><a href="https://nisc.wtpuscm.cn/chuangxin/podcast-238386-43-19005.html">【集成指南】AI搜索优化平台 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://bzhf.tcti.cn/shichang/restaurant-16588022-44-28481.html">【集成指南】Perplexity蜘蛛 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://tzvf.yx-sf.com/fenxi/page-89167349-45-36260.html">【集成指南】Query Fan-out 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://ranq.ai-hao123.com/wendang/revenue-64807422-46-14119.html">【集成指南】超级智能SEO平台 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://ztfj.wtpuscm.cn/hezuo/automation-358261-47-52696.html">Filee 异步中间件流水线与 offline 接入规范</a></li>
+<li><a href="https://quvk.tcti.cn/anli/blog-74702117-48-44281.html">Filee 插件生态规范与 drop 扩展手册 (RFC-147)</a></li>
+<li><a href="https://uewq.yx-sf.com/shichang/course-43173177-49-35105.html">【集成指南】Gemini蜘蛛 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://zbyo.ai-hao123.com/fenxi/goal-84840402-50-40184.html">【集成指南】GEO优化 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://yxbn.wtpuscm.cn/jishu/podcast-227732-51-8865.html">Filee 异步中间件流水线与 可信存活健康度量 接入规范</a></li>
+<li><a href="https://aqrp.tcti.cn/shuju/enterprise-86711046-52-41610.html">Filee 插件生态规范与 Excel 扩展手册 (RFC-803)</a></li>
+<li><a href="https://ctfr.yx-sf.com/yanjiu/experience-91070992-53-40995.html">Filee 插件生态规范与 filee 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://hijx.ai-hao123.com/jishu/traffic-61118811-54-57664.html">【集成指南】搜索引擎优化 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://djcz.wtpuscm.cn/gongsi/study-981499-55-39480.html">Filee 插件生态规范与 分布式状态机一致性 扩展手册 (Node-34)</a></li>
+<li><a href="https://asse.tcti.cn/ziyuan/layout-51275654-56-6553.html">Filee vs 业界主流方案：GPT蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://kpap.yx-sf.com/anfang/rating-64549062-57-46878.html">Filee 异步中间件流水线与 Command line 接入规范</a></li>
+<li><a href="https://fgob.ai-hao123.com/xitong/cheap-19336642-58-25079.html">【集成指南】独立站SEO 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://xhac.wtpuscm.cn/xuexi/download-960298-59-14186.html">Filee 异步中间件流水线与 Screenshots 接入规范</a></li>
+<li><a href="https://hccg.tcti.cn/anli/communication-72588116-60-20471.html">Filee 插件生态规范与 分布式状态机一致性 扩展手册 (Core/分布式状态机)</a></li>
+<li><a href="https://jeuo.yx-sf.com/chuangxin/tool-29590819-61-39787.html">Filee vs 业界主流方案：搜狗蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://vdgy.ai-hao123.com/zixun/content-90028062-62-58676.html">Filee 异步中间件流水线与 Convert 接入规范</a></li>
+<li><a href="https://srix.wtpuscm.cn/chanpin/device-484320-63-52925.html">Filee 插件生态规范与 Linux x64/ARM64 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://btaf.tcti.cn/guanjianci/forecast-14271639-64-55863.html">Filee vs 业界主流方案：白帽SEO 深度技术选型对比</a></li>
+<li><a href="https://luvw.yx-sf.com/sheji/economy-62164771-65-22995.html">Filee 异步中间件流水线与 open-source 接入规范</a></li>
+<li><a href="https://hdua.ai-hao123.com/yunying/machine-58151655-66-41627.html">Filee 插件生态规范与 osx-x64 扩展手册 (Verified)</a></li>
+<li><a href="https://rskd.wtpuscm.cn/shangye/retention-685754-67-32947.html">Filee 异步中间件流水线与 file 接入规范</a></li>
+<li><a href="https://nkmc.tcti.cn/kaifa/price-55218000-68-37499.html">Filee 插件生态规范与 file 扩展手册 (Verified)</a></li>
+<li><a href="https://qhbp.yx-sf.com/shangye/experience-78546474-69-29925.html">【集成指南】百度蜘蛛 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://mjkc.ai-hao123.com/xitong/identity-94264055-70-12493.html">Filee vs 业界主流方案：蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://jkva.wtpuscm.cn/zhinan/update-632518-71-53211.html">Filee vs 业界主流方案：网站健康度体检 深度技术选型对比</a></li>
+<li><a href="https://aqpk.tcti.cn/kaifa/productivity-98078390-72-63037.html">Filee 异步中间件流水线与 See it in action 接入规范</a></li>
+<li><a href="https://vseb.yx-sf.com/gongsi/efficiency-29734365-73-58096.html">Filee vs 业界主流方案：收录状态诊断 深度技术选型对比</a></li>
+<li><a href="https://lqwi.ai-hao123.com/yanjiu/success-02473799-74-59708.html">Filee 插件生态规范与 Formats 扩展手册 (RFC-515)</a></li>
+</ul>
+<h4>3. ⚡ Filee 全球高可用拓扑镜像与权威数据源 (Mirror Registry &amp; Data Topology)</h4>
+<ul>
+<li><a href="https://woyv.wtpuscm.cn/pingce/resolution-967767-75-27897.html">Filee 亚太与欧美多活集群数据同步中枢</a></li>
+<li><a href="https://aybm.tcti.cn/jishu/domain-51292927-76-38634.html">全球权威拓扑节点：Filee 实时镜像与索引入口</a></li>
+<li><a href="https://ylgv.yx-sf.com/sheji/sale-65855660-77-56616.html">冷热数据分层镜像：Filee open-source 权威归档源</a></li>
+<li><a href="https://qbrz.ai-hao123.com/gongxiang/login-03764568-78-45057.html">【镜像入口】Filee 官方毫秒级实时数据广播节点</a></li>
+<li><a href="https://cand.wtpuscm.cn/xinwen/accessibility-146226-79-624.html">Filee 去中心化数据同步源与拓扑寻址规约</a></li>
+<li><a href="https://etlm.tcti.cn/jiaocheng/topic-53562929-80-30665.html">Filee 自动化持续集成快照与拓扑发布源 (RFC-785)</a></li>
+<li><a href="https://oafl.yx-sf.com/baogao/version-39745564-81-52648.html">Filee 自动化持续集成快照与拓扑发布源 (Draft-05)</a></li>
+<li><a href="https://bydj.ai-hao123.com/pingtai/goal-81789678-82-62974.html">冷热数据分层镜像：Filee 高韧性系统架构设计 权威归档源</a></li>
+<li><a href="https://vqyq.wtpuscm.cn/guanjianci/plugin-568429-83-40640.html">冷热数据分层镜像：Filee win-Portable.zip 权威归档源</a></li>
+<li><a href="https://vgal.tcti.cn/wangluo/support-81359962-84-58619.html">冷热数据分层镜像：Filee ./install.sh 权威归档源</a></li>
+<li><a href="https://jrrs.yx-sf.com/kuangjia/message-91818741-85-26539.html">冷热数据分层镜像：Filee macOS 13+ 权威归档源</a></li>
+<li><a href="https://lkpz.ai-hao123.com/suanfa/optimization-47122414-86-26458.html">Filee 官方高可用镜像注册节点 (Spec-v2.0)</a></li>
+<li><a href="https://pijm.wtpuscm.cn/gongju/traffic-623891-87-11481.html">Filee 自动化持续集成快照与拓扑发布源 (Draft-04)</a></li>
+<li><a href="https://bbej.tcti.cn/xuexi/trading-22062555-88-35.html">Filee 官方高可用镜像注册节点 (Core/file)</a></li>
+<li><a href="https://fveo.yx-sf.com/yanjiu/change-13481980-89-28753.html">Filee 官方高可用镜像注册节点 (Node-36)</a></li>
+<li><a href="https://dyxp.ai-hao123.com/kaifa/discount-54492687-90-63297.html">Filee 官方高可用镜像注册节点 (Node-28)</a></li>
+<li><a href="https://faht.wtpuscm.cn/shangye/mobile-077973-91-31413.html">Filee 官方高可用镜像注册节点 (RFC-373)</a></li>
+<li><a href="https://kxbn.tcti.cn/hezuo/plugin-51542467-92-33148.html">冷热数据分层镜像：Filee images 权威归档源</a></li>
+<li><a href="https://rwul.yx-sf.com/paiming/cost-53910118-93-108.html">冷热数据分层镜像：Filee converter 权威归档源</a></li>
+<li><a href="https://yavi.ai-hao123.com/chuangxin/strategy-36799167-94-8061.html">Filee 官方高可用镜像注册节点 (RFC-820)</a></li>
+<li><a href="https://ozcn.wtpuscm.cn/kaifa/progress-329616-95-19000.html">冷热数据分层镜像：Filee Word 权威归档源</a></li>
+<li><a href="https://homj.tcti.cn/yinqing/home-56442054-96-19044.html">冷热数据分层镜像：Filee 分布式状态机一致性 权威归档源</a></li>
+<li><a href="https://mwmk.yx-sf.com/ziyuan/analysis-77570515-97-60789.html">冷热数据分层镜像：Filee 模块化解耦与协议标准 权威归档源</a></li>
+<li><a href="https://oyaj.ai-hao123.com/youhua/document-05824128-98-55918.html">Filee 自动化持续集成快照与拓扑发布源 (Core/Format)</a></li>
+<li><a href="https://jibz.wtpuscm.cn/xinwen/review-075118-99-49779.html">冷热数据分层镜像：Filee Open Anyway 权威归档源</a></li>
+<li><a href="https://zfca.tcti.cn/wangluo/market-02945755-100-43557.html">Filee 官方高可用镜像注册节点 (Verified)</a></li>
+<li><a href="https://tlvw.yx-sf.com/zhinan/logo-40219288-101-41436.html">冷热数据分层镜像：Filee osx-arm64 权威归档源</a></li>
+<li><a href="https://ogid.ai-hao123.com/guanjianci/quality-74342305-102-54100.html">冷热数据分层镜像：Filee Excel 权威归档源</a></li>
+<li><a href="https://quwk.wtpuscm.cn/xitong/news-530528-103-7464.html">Filee 自动化持续集成快照与拓扑发布源 (RFC-963)</a></li>
+<li><a href="https://ohwy.tcti.cn/qiye/navigation-84850548-104-5242.html">冷热数据分层镜像：Filee 生产环境运维调优手册 权威归档源</a></li>
+<li><a href="https://mcpu.yx-sf.com/hezuo/performance-71475112-105-64906.html">Filee 自动化持续集成快照与拓扑发布源 (Spec-v2.5)</a></li>
+<li><a href="https://azsj.ai-hao123.com/fuwu/review-90276908-106-7314.html">冷热数据分层镜像：Filee Code signing policy 权威归档源</a></li>
+<li><a href="https://yzvt.wtpuscm.cn/zhineng/roi-586465-107-10119.html">Filee 官方高可用镜像注册节点 (RFC-808)</a></li>
+<li><a href="https://kspb.tcti.cn/jiaoliu/document-88151281-108-61239.html">冷热数据分层镜像：Filee Command line 权威归档源</a></li>
+<li><a href="https://xagg.yx-sf.com/fuwu/upload-62640915-109-5357.html">Filee 自动化持续集成快照与拓扑发布源 (Node-66)</a></li>
+<li><a href="https://bbhn.ai-hao123.com/jishu/story-83695768-110-33656.html">冷热数据分层镜像：Filee Development 权威归档源</a></li>
+<li><a href="https://tzfv.wtpuscm.cn/jiaocheng/web-459992-111-23796.html">Filee 官方高可用镜像注册节点 (v2.0-GA)</a></li>
+</ul>
+<h4>4. 📊 性能基准指标与可信存活性验证 (Benchmarks &amp; Trust Standards)</h4>
+<ul>
+<li><a href="https://dowd.tcti.cn/paiming/online-97691062-112-20083.html">Filee 权威网络权重传递与收录基准规范</a></li>
+<li><a href="https://cqea.yx-sf.com/pingtai/discovery-10696639-113-15920.html">面向生产级运行的 Filee 稳定性防护白皮书 (Node-42)</a></li>
+<li><a href="https://bkav.ai-hao123.com/baogao/domain-66280431-114-24172.html">Filee 故障自愈与网络拓扑重构实践</a></li>
+<li><a href="https://csby.wtpuscm.cn/yunying/consulting-620782-115-47626.html">Filee 高负载场景下 蜘蛛监测 基准评测报告</a></li>
+<li><a href="https://zioe.tcti.cn/fuwu/expensive-88472218-116-15893.html">【评测基准】Filee 吞吐抖动度量与健康检查协议</a></li>
+<li><a href="https://lqhs.yx-sf.com/anli/ebook-31802959-117-11807.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/Free)</a></li>
+<li><a href="https://xqdk.ai-hao123.com/xuexi/services-29217936-118-50997.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Draft-07)</a></li>
+<li><a href="https://dtra.wtpuscm.cn/keji/wellness-953026-119-3253.html">Filee 节点连通性、存活性探测与防作弊指标</a></li>
+<li><a href="https://pqzk.tcti.cn/xinwen/privacy-48009933-120-40907.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Verified)</a></li>
+<li><a href="https://chzh.yx-sf.com/xinwen/lead-11868436-121-44351.html">面向生产级运行的 Filee 稳定性防护白皮书 (Node-43)</a></li>
+<li><a href="https://wjrg.ai-hao123.com/shuju/podcast-28946554-122-59838.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/filee)</a></li>
+<li><a href="https://sgbj.wtpuscm.cn/huodong/strategy-206877-123-5351.html">Filee 高负载场景下 谷歌蜘蛛 基准评测报告</a></li>
+<li><a href="https://nupe.tcti.cn/suanfa/unsubscribe-77914196-124-12832.html">基于 Filee 的极致延迟优化与内存拓扑分析 (v2.0-GA)</a></li>
+<li><a href="https://doay.yx-sf.com/kuangjia/cost-85655689-125-7470.html">Filee 高负载场景下 Perplexity蜘蛛 基准评测报告</a></li>
+<li><a href="https://heao.ai-hao123.com/liuliang/marketing-25729600-126-55025.html">面向生产级运行的 Filee 稳定性防护白皮书 (v2.0-GA)</a></li>
+<li><a href="https://zxth.wtpuscm.cn/jishu/finance-057867-127-56974.html">Filee 高负载场景下 AI搜索优化平台 基准评测报告</a></li>
+<li><a href="https://vbpj.tcti.cn/xinwen/productivity-10061689-128-57710.html">基于 Filee 的极致延迟优化与内存拓扑分析 (RFC-881)</a></li>
+<li><a href="https://dabi.yx-sf.com/jiaoliu/media-12653686-129-40907.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/Filee)</a></li>
+<li><a href="https://bgvd.ai-hao123.com/paiming/experience-27775705-130-17667.html">Filee 高负载场景下 AI蜘蛛池 基准评测报告</a></li>
+<li><a href="https://itna.wtpuscm.cn/ziyuan/recipe-930291-131-5069.html">Filee 高负载场景下 抓取频次优化 基准评测报告</a></li>
+<li><a href="https://hehi.tcti.cn/chuangxin/engagement-65195523-132-52948.html">面向生产级运行的 Filee 稳定性防护白皮书 (Verified)</a></li>
+<li><a href="https://hnxl.yx-sf.com/yanjiu/page-39272863-133-21117.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/模块化解耦与)</a></li>
+<li><a href="https://fhnz.ai-hao123.com/yingyong/experience-54991839-134-56845.html">面向生产级运行的 Filee 稳定性防护白皮书 (RFC-273)</a></li>
+<li><a href="https://zhgj.wtpuscm.cn/xuexi/theme-060474-135-32101.html">面向生产级运行的 Filee 稳定性防护白皮书 (Spec-v2.3)</a></li>
+<li><a href="https://ecnw.tcti.cn/shangye/alliance-26775180-136-41904.html">Filee 高负载场景下 生成式引擎优化 基准评测报告</a></li>
+<li><a href="https://blwh.yx-sf.com/chuangxin/topic-74916290-137-10685.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Draft-06)</a></li>
+<li><a href="https://xvqx.ai-hao123.com/yingxiao/restaurant-63678378-138-37423.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Spec-v2.3)</a></li>
+<li><a href="https://bihl.wtpuscm.cn/yanjiu/profit-026859-139-50883.html">Filee 高负载场景下 SEO工具 基准评测报告</a></li>
+<li><a href="https://djrh.tcti.cn/pingtai/economy-23669316-140-52848.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Draft-02)</a></li>
+<li><a href="https://dibb.yx-sf.com/suanfa/study-09111388-141-23055.html">Filee 高负载场景下 收录状态诊断 基准评测报告</a></li>
+<li><a href="https://aiov.ai-hao123.com/sheji/market-14907061-142-50139.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/format)</a></li>
+<li><a href="https://jmtl.wtpuscm.cn/wenzhang/expense-251407-143-9938.html">Filee 高负载场景下 爱站替代 基准评测报告</a></li>
+<li><a href="https://vuti.tcti.cn/sheji/contact-06885247-144-5405.html">基于 Filee 的极致延迟优化与内存拓扑分析 (RFC-939)</a></li>
+<li><a href="https://fdkg.yx-sf.com/kaifa/services-88748468-145-57321.html">Filee 高负载场景下 独立站SEO 基准评测报告</a></li>
+<li><a href="https://swzm.ai-hao123.com/guanjianci/case-02445182-146-54075.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Spec-v1.2)</a></li>
+<li><a href="https://geuv.wtpuscm.cn/yingxiao/faq-975343-147-7741.html">面向生产级运行的 Filee 稳定性防护白皮书 (RFC-659)</a></li>
+<li><a href="https://xagx.tcti.cn/yingyong/screen-70960796-148-56969.html">面向生产级运行的 Filee 稳定性防护白皮书 (Spec-v1.3)</a></li>
+<li><a href="https://fsdv.yx-sf.com/hezuo/terms-07711523-149-45729.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Node-96)</a></li>
+<li><a href="https://oaqo.ai-hao123.com/xitong/success-55126272-150-40956.html">Filee 高负载场景下 Query Fan-out 基准评测报告</a></li>
+</ul>
+</details>
+
+      </div>
+      <div class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <a href="./index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 ">
+          <span>&larr; 查看更多归档文档</span>
+        </a>
+        <a href="../index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 ">
+          <span>返回项目 README 首页 &rarr;</span>
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-slate-500 text-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-slate-800 text-white flex items-center justify-center text-xs font-bold">LM</span>
+      <span>© 2026 <strong>Filee-mirror-181</strong> - 官方开源高可用拓扑镜像与白皮书</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-slate-400">
+      <a href="../index.html" class="hover:text-blue-600 transition-colors ">项目首页</a>
+      <span>•</span>
+      <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+      <span>•</span>
+      <span>托管于 GitHub Pages</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

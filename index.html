@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filee-mirror-181 - 官方开源镜像与技术白皮书中心</title>
+  <meta name="description" content="High availability mirror and network topology specifications for KnifeLemon/Filee">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-hover: #1d4ed8;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.68;
+        color: #1e293b;
+      }
+      .markdown-body {
+        color: #1e293b;
+      }
+      .markdown-body h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .markdown-body h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .markdown-body h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        margin-bottom: 0.6rem;
+        color: #334155;
+      }
+      .markdown-body p {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+      }
+      .markdown-body a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px dashed #93c5fd;
+        transition: all 0.2s ease;
+      }
+      .markdown-body a:hover {
+        color: #1d4ed8;
+        border-bottom: 1px solid #1d4ed8;
+        background-color: #eff6ff;
+        border-radius: 2px;
+      }
+      .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .markdown-body ul {
+        list-style-type: disc;
+      }
+      .markdown-body ol {
+        list-style-type: decimal;
+      }
+      .markdown-body li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .markdown-body pre {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .markdown-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15rem 0.35rem;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-radius: 0.35rem;
+        border: 1px solid #e2e8f0;
+      }
+      .markdown-body pre code {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+      .markdown-body blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1.25rem;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        color: #475569;
+      }
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2rem 0;
+        display: block;
+        overflow-x: auto;
+      }
+      .markdown-body th, .markdown-body td {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 1rem;
+        text-align: left;
+      }
+      .markdown-body th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+      }
+      .markdown-body tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .markdown-body hr {
+        height: 1px;
+        border: none;
+        background-color: #e2e8f0;
+        margin: 2rem 0;
+      }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="./index.html" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform ">LM</span>
+        <span class="font-bold text-slate-900 tracking-tight text-lg group-hover:text-blue-600 transition-colors ">Filee-mirror-181</span>
+      </a>
+      <span class="hidden md:inline-block text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono ">Pages Docs</span>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="./index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-blue-600 bg-blue-50 font-semibold ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首页 (README)</span>
+      </a>
+      <a href="./docs/index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-50 font-medium ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>文档归档 (Docs)</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+      </a>
+      <div class="h-4 w-px bg-slate-200 mx-1"></div>
+      <a href="https://github.com/shijiuwei/Filee-mirror-181" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+      <a href="https://github.com/shijiuwei/Filee-mirror-181/wiki" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="hidden sm:inline">Wiki</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <!-- Hero Header -->
+  <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white py-12 px-4 sm:px-6 shadow-md border-b border-slate-800">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full text-xs font-semibold">✓ 官方高可用开源镜像</span>
+        <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-full text-xs font-semibold">● 72h 存活率指标 99.8%</span>
+        <span class="px-2.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-400/30 rounded-full text-xs font-mono ">GitHub Pages</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">Filee-mirror-181</h1>
+      <p class="text-slate-300 text-base sm:text-lg max-w-3xl leading-relaxed mb-6">High availability mirror and network topology specifications for KnifeLemon/Filee</p>
+      
+      <!-- 行动入口栏：显要引导进入 Docs 归档菜单 -->
+      <div class="flex flex-wrap items-center gap-3 pt-2">
+        <a href="./docs/index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>进入文档归档菜单 (Docs Catalog) &rarr;</span>
+        </a>
+        <a href="#readme-content" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm border border-white/20 backdrop-blur transition-colors ">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          <span>查阅项目 README 正文</span>
+        </a>
+        <a href="https://github.com/shijiuwei/Filee-mirror-181" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white text-xs transition-colors ">
+          <span>访问 GitHub 源码库</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体区域：两栏布局（主栏：改造后 README；侧栏：Docs 归档菜单预览与外链速查） -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- 主内容区：展示改造后的 README.md 静态渲染 HTML -->
+      <article id="readme-content" class="lg:col-span-8 bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+          <div class="flex items-center gap-2 text-xs text-slate-500 font-mono ">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <span>README.md (已注入高权重拓扑网络)</span>
+          </div>
+          <a href="./docs/index.html" class="text-xs text-blue-600 hover:underline flex items-center gap-1 font-medium ">
+            <span>浏览全部 8 篇归档文档</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+        <div class="markdown-body">
+          <p align="left">
+  <a href="https://shijiuwei.github.io/Filee-mirror-181/"><img src="https://img.shields.io/badge/GitHub_Pages-在线文档中心-2563eb.svg" alt="GitHub Pages"></a>
+  <a href="https://shijiuwei.github.io/Filee-mirror-181/docs/"><img src="https://img.shields.io/badge/Docs_Archive-文档归档菜单-10b981.svg" alt="Docs Archive"></a>
+</p>
+<blockquote>
+<p>🌐 <strong>官方在线文档与静态镜像中心 (GitHub Pages)</strong>：<a href="https://shijiuwei.github.io/Filee-mirror-181/">https://shijiuwei.github.io/Filee-mirror-181/</a><br />
+📚 <strong>技术规约与文档归档菜单 (Docs Catalog)</strong>：<a href="https://shijiuwei.github.io/Filee-mirror-181/docs/">https://shijiuwei.github.io/Filee-mirror-181/docs/</a></p>
+</blockquote>
+<p align="center">
+  <a href="https://dhmi.ai-hao123.com/zixun/website-88270103.html"><img src="docs/media/banner-en.jpg" alt="Filee: Drag. Drop. Converted." width="100%"></a>
+</p>
+<p align="center">
+  <b>A free, open-source file converter you use by dragging.</b><br>
+  Hold a key (<kbd>Ctrl</kbd>, <kbd>Option</kbd> on macOS), drag files and drop them on a format in the donut that opens at your cursor.
+</p>
+<p align="center">
+  <a href="https://ecnw.tcti.cn/shangye/alliance-26775180.html"><b>Website</b></a> ·
+  <a href="https://rwxy.tcti.cn/ziyuan/privacy-74795907.html"><b>Download</b></a> ·
+  <a href="https://bkav.ai-hao123.com/baogao/domain-66280431.html"><b>LinkedIn</b></a> ·
+  <a href="#install">Install</a> ·
+  <a href="#command-line">Command line</a> ·
+  <a href="#development">Development</a>
+</p>
+<p align="center">
+  <a href="https://bbhn.ai-hao123.com/jishu/story-83695768.html"><img src="https://github.com/KnifeLemon/Filee/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://nbsy.tcti.cn/guanjianci/status-52825102.html"><img src="https://img.shields.io/github/v/release/KnifeLemon/Filee?color=7F77DD&label=release" alt="Latest release"></a>
+  <a href="https://homj.tcti.cn/yinqing/home-56442054.html"><img src="https://img.shields.io/github/downloads/KnifeLemon/Filee/total?color=1D9E75" alt="Downloads"></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-3C3489" alt="Windows 10 | 11">
+  <img src="https://img.shields.io/badge/Linux-x64%20%7C%20ARM64-3C3489" alt="Linux x64 | ARM64">
+  <img src="https://img.shields.io/badge/macOS-preview-534AB7" alt="macOS preview">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6A62C9" alt="MIT license"></a>
+</p>
+<p align="center">
+  <a href="https://dyxp.ai-hao123.com/kaifa/discount-54492687.html"><img src="https://trendshift.io/api/badge/trendshift/repositories/276987/weekly?language=C%23&v=2" alt="Filee: #1 C# repository of the week on Trendshift" width="250" height="55"></a>
+  <a href="https://jkva.wtpuscm.cn/zhinan/update-632518.html"><img src="https://trendshift.io/api/badge/trendshift/repositories/276987/daily?language=C%23&v=2" alt="Filee: #1 C# repository of the day on Trendshift" width="250" height="55"></a>
+</p>
+<p align="center">
+  <b>English</b> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.ja.md">日本語</a> ·
+  <a href="README.ko.md">한국어</a> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="README.zh-TW.md">繁體中文</a> ·
+  <a href="README.pl.md">Polski</a> ·
+  <a href="README.hi.md">हिन्दी</a> ·
+  <a href="README.ru.md">Русский</a> ·
+  <a href="README.ar.md">العربية</a> ·
+  <a href="README.pt-BR.md">Português (Brasil)</a> ·
+  <a href="README.pt-PT.md">Português (Portugal)</a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.th.md">ไทย</a>
+</p>
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <b>Right at your cursor</b><br>
+      No app window to open.
+      The formats appear where you already are, only the ones that make sense for the files you drag.
+    </td>
+    <td width="33%" valign="top">
+      <b>266 formats, no other software</b><br>
+      Images, PDF, Word, Excel, PowerPoint, HWP, e-books, archives, fonts, CAD, 3D models and geospatial data work without Office, Hancom Office or LibreOffice.
+    </td>
+    <td width="33%" valign="top">
+      <b>Stays on your computer</b><br>
+      Nothing is uploaded.
+      Filee works offline and saves the result next to the original.
+    </td>
+  </tr>
+</table>
+<h2>See it in action</h2>
+<p align="center">
+  <a href="https://aybm.tcti.cn/jishu/domain-51292927.html"><img src="docs/media/demo-en.webp" alt="Dragging trip.jpg with Ctrl held: a donut of formats opens at the cursor, the file is dropped on PNG, a progress ring completes and trip.png appears" width="820"></a><br>
+  <sub>Watch the 27-second video and try the interactive demo on <a href="https://pqzk.tcti.cn/xinwen/privacy-48009933.html">filee.sh</a></sub>
+</p>
+<h2>Install</h2>
+<p>Download from <a href="https://rwul.yx-sf.com/paiming/cost-53910118.html">Releases</a>.</p>
+<ul>
+<li><strong>Windows 10/11</strong>: run <code>Filee-&lt;version&gt;-win-Setup.exe</code>, or unzip the <code>win-Portable.zip</code> and run <code>Filee.exe</code>.
+<ul>
+<li>Setup is Filee's own installer, in Filee's languages, and needs nothing else on the PC.</li>
+<li>It can add the Explorer menu, start at sign-in, the <code>filee</code> command and optional engines.</li>
+<li>Silent installs take Inno Setup's switches (<code>/VERYSILENT /SUPPRESSMSGBOXES</code>).</li>
+</ul>
+</li>
+<li><strong>macOS 13+</strong> (preview): unpack the <code>osx-arm64</code> or <code>osx-x64</code> package and run <code>./install.sh</code>.
+<ul>
+<li>Or open the <code>.dmg</code> and drag Filee to Applications (the <code>filee</code> command comes with <code>install.sh</code>).</li>
+<li>The build isn't notarized yet, so allow the first start in System Settings → Privacy &amp; Security → <strong>Open Anyway</strong>.</li>
+</ul>
+</li>
+<li><strong>Linux x64/ARM64</strong> (Ubuntu 22.04+): unpack the package and run <code>./install.sh</code> (no root, needs Python 3).
+<ul>
+<li>Drag gestures need X11.
+On Wayland, use the drop zone and the file manager's right-click menu.</li>
+</ul>
+</li>
+</ul>
+<p>Filee shows new releases in its menu and updates itself, keeping your settings and engines.
+After an update, a few slides show what's new.</p>
+<p><strong>Windows: Filee doesn't start (no window, no error)?</strong>
+This happens on Windows 10 that hasn't been updated for a long time, on a PC whose processor supports Hardware-enforced Stack Protection (CET).
+Windows turns that protection on but lacks a part that .NET needs, so Filee and Setup stop right away.</p>
+<ul>
+<li><strong>Recommended:</strong> install the available Windows updates (the latest cumulative update).</li>
+<li><strong>If updating isn't possible:</strong> turning the protection off for Filee alone usually works.
+Run this in PowerShell as administrator:</li>
+</ul>
+<pre><code class="language-powershell">Set-ProcessMitigation -Name Filee.exe -Disable UserShadowStack
+Set-ProcessMitigation -Name filee-cli.exe -Disable UserShadowStack
+</code></pre>
+<p>Do the same with Setup's file name (e.g. <code>Filee-&lt;version&gt;-win-Setup.exe</code>), or use the portable ZIP, which needs only these two lines.
+To undo it, remove the entries in Windows Security → App &amp; browser control → Exploit protection settings → Program settings.</p>
+<h2>Features</h2>
+<ul>
+<li><strong>A donut at the cursor</strong>: hold a key, drag files and drop them on a format.
+Only formats that fit the files appear.</li>
+<li><strong>Straight from the browser</strong>: drag a picture, a link to a file or a download out of Chrome, Edge, Firefox or Safari the same way.
+<ul>
+<li>Filee saves it to your Downloads folder (or keeps only the converted file) and converts it.</li>
+<li>Links are downloaded without your browser's sign-in.</li>
+</ul>
+</li>
+<li><strong>One toolbar per file type</strong>, arranged by drag and drop, with presets for:
+<ul>
+<li>quality, size, DPI</li>
+<li>PDF pages and compression</li>
+<li>video and audio</li>
+<li>output folder and file names</li>
+</ul>
+</li>
+<li><strong>Two sides to every donut</strong>: press <kbd>Tab</kbd> or turn the mouse wheel while it is open to flip it over to less common formats and tools.</li>
+<li><strong>Crop before converting</strong>: the Crop slice opens pictures one by one.
+Drag the frame, pick a ratio, and only that part is saved.</li>
+<li><strong>Many files at once</strong>, in parallel.
+Routes with several steps (HWP → HWPX → DOCX) are found automatically.</li>
+<li><strong>Watch folders</strong> convert every file that lands in them.</li>
+<li><strong>Recent conversions</strong> on Home, each with a thumbnail: open the result, or open it with another app.</li>
+<li><strong>Other ways in</strong>: the right-click menu, a keyboard shortcut, the drop zone and the <a href="#command-line"><code>filee</code> command</a>.</li>
+<li>Light and dark themes with your own accent colour and donut opacity, in English, Español, 日本語, 한국어, 简体中文, 繁體中文, Polski, हिन्दी, Русский, العربية (right to left), Português (Brasil), Français, नेपाली, ไทย, Türkçe, Português (Portugal) and Deutsch.</li>
+</ul>
+<h2>Screenshots</h2>
+<table>
+  <tr>
+    <td width="50%"><img src="docs/media/page-toolbar-en.png" alt="Donut toolbar editor with profiles and presets"></td>
+    <td width="50%"><img src="docs/media/page-home-en.png" alt="Home screen with the drop zone and recent conversions"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Arrange the donut by drag and drop, one profile per file type</sub></td>
+    <td align="center"><sub>Home: drop zone and recent conversions</sub></td>
+  </tr>
+</table>
+<h2>Formats</h2>
+<table><thead><tr><th>From</th><th>To</th></tr></thead><tbody>
+<tr><td><strong>Images</strong>: JPG, PNG, WEBP, AVIF, TIFF, BMP, GIF, APNG, ICO, ICNS, JPEG XL, JPEG 2000, PSD/PSB, TGA, PPM, HEIC, QOI, DDS, PCX, MNG, CUR, …;<br>GIMP XCF, camera RAW (CR2, CR3, NEF, ARW, DNG, …), DICOM, OpenEXR, HDR, FITS, JPEG XR (Windows), iPhone Live Photo (LIVP) read</td><td>any of these (HEIC⁵), PDF, SVG (traced), resized, grayscale;<br>Live/Motion Photos (iPhone, Android) → their video (MP4, MOV⁵), and a video → Live Photo (iPhone) or Motion Photo (Android)⁵, experimental</td></tr>
+<tr><td><strong>Vector</strong>: SVG, SVGZ, EMF, WMF, AI<br>EPS, PS¹<br>CDR, VSD, CGM, ODG, FODG²</td><td>PDF (vector), PNG and other images,<br>SVG ↔ SVGZ, SVG → DXF/DWG, PDF → EPS/PS¹, SVG → EMF, WMF, ODG²</td></tr>
+<tr><td><strong>PDF</strong></td><td>DOCX, HWPX, TXT, PNG, JPG, TIFF, CBZ, PPTX (a picture of each page), SVG²;<br>merge (in an order you choose first), split, page ranges, compress (smaller PDFs)</td></tr>
+<tr><td><strong>Documents</strong>: DOCX, DOCM, DOTX, EML, Outlook MSG;<br>OFD (Chinese e-invoices, official documents) read<br>DOC, ODT, FODT, OTT, RTF, WPS, WPD, Pages, ClarisWorks, MacWrite, T602, …²</td><td>PDF, DOCX, HWPX, EPUB, TXT, HTML;<br>MSG → EML<br>ODT, FODT, OTT²</td></tr>
+<tr><td><strong>Spreadsheets</strong>: XLSX, XLSM, XLS, XLT, ODS, CSV, TSV<br>OTS, FODS, Numbers, ET²</td><td>PDF, XLSX, ODS, CSV, TSV, JSON, HWPX, HTML<br>XLT, OTS²</td></tr>
+<tr><td><strong>Presentations</strong>: PPTX, PPTM, POTX, POTM, PPSX<br>PPT, ODP, OTP, FODP, Keynote²</td><td>PDF, PNG, JPG, DOCX, HWPX<br>OTP²</td></tr>
+<tr><td><strong>HWP</strong>: HWP, HWPX</td><td>PDF, PNG, DOCX, HWPX ↔ HWP, TXT, Markdown, HTML</td></tr>
+<tr><td><strong>Text</strong>: TXT, LOG, script source (PY, PAC, BAT, COMMAND; read, never run), Markdown, HTML;<br>MHTML (saved web pages) read<br>reStructuredText, LaTeX, Org, AsciiDoc, Typst, MediaWiki, DocBook, Jupyter, Textile, man, OPML³</td><td>UTF-8 TXT, PDF, DOCX, HWPX, EPUB<br>each other, PPTX slides³</td></tr>
+<tr><td><strong>E-books</strong>: EPUB, KEPUB, MOBI, AZW3, AZW, AZW4, FB2, CBZ, CBR, CB7, HTMLZ, TXTZ<br>LIT, LRF, CHM, PDB, …⁴</td><td>PDF, EPUB, KEPUB (Kobo), DOCX, TXT, HTML, HWPX<br>MOBI, AZW3⁴</td></tr>
+<tr><td><strong>Video</strong>⁵: MP4, MOV, MKV, WEBM, AVI, WMV, FLV, MPEG, Video CD (DAT), TS, M2TS, 3GP, OGV, VOB, …</td><td>MP4 (H.264, HEVC, AV1), WEBM, MOV, MKV, AVI, GIF, APNG, MP3, M4A, 720p,<br>subtitles (SRT, ASS, WebVTT)</td></tr>
+<tr><td><strong>Audio</strong>⁵: MP3, M4A, AAC, WAV, FLAC, OGG, OPUS, WMA, AIFF, AMR, APE, WavPack, TTA, DSD (DSF, DFF), DTS, AC3, E-AC3, …</td><td>MP3, M4A (AAC, ALAC), WAV, FLAC, OGG, OPUS, AAC, WavPack, TTA, W64, AC3, E-AC3</td></tr>
+<tr><td><strong>Subtitles</strong>: SRT, ASS/SSA, WebVTT, SAMI (SMI), LRC, TTML, MicroDVD, SCC</td><td>each other as UTF-8 (Korean CP949 files read correctly)</td></tr>
+<tr><td><strong>Archives</strong>: ZIP, ANSYS Workbench (WBPZ), 7Z, RAR, TAR, TAR.GZ, TAR.BZ2, TAR.XZ, GZ, ISO, CAB, DMG, ALZ, EGG, …</td><td>extract, ZIP, 7Z, TAR, TAR.GZ;<br>any files → one ZIP</td></tr>
+<tr><td><strong>CAD</strong>: DWG, DXF</td><td>PDF, SVG, PNG, DWG ↔ DXF</td></tr>
+<tr><td><strong>Fonts</strong>: TTF, OTF, WOFF, WOFF2, EOT;<br>FON (Windows bitmap fonts) read</td><td>each other;<br>FON → one font per size</td></tr>
+<tr><td><strong>Data</strong>: JSON, JSON Lines, YAML, TOML, XML<br>vCard, iCalendar</td><td>each other, CSV and XLSX (tables);<br>vCard, iCalendar ↔ CSV</td></tr>
+<tr><td><strong>3D models</strong>: GLB, glTF, STL, OBJ (+ MTL), 3MF, PLY;<br>FBX read</td><td>each other, PNG preview</td></tr>
+<tr><td><strong>Geospatial vectors</strong>: Shapefile, GeoJSON, KML, KMZ, GPX<br>CSV with coordinates; Garmin FIT read</td><td>each other and CSV / XLSX / JSON;<br>projected data (UTM, Web Mercator, Lambert, Albers) comes out as WGS 84 longitude / latitude</td></tr>
+</tbody></table>
+<p>Unmarked formats work out of the box, without Office, Hancom Office or LibreOffice.
+Marked ones need an optional engine, downloaded only when needed: ¹ Ghostscript, ² LibreOffice, ³ Pandoc, ⁴ calibre, ⁵ FFmpeg (<a href="docs/ENGINES.md">details</a>).</p>
+<h2>Command line</h2>
+<p>The <code>filee</code> command uses the same engines and presets as the app (Setup or <code>install.sh</code> adds it).</p>
+<pre><code>filee convert photo.heic --to jpg
+filee convert *.png --to webp --quality 80 -o converted
+filee watch D:\Inbox --to pdf --move-originals
+</code></pre>
+<p>Every command and option: <a href="https://nkmc.tcti.cn/kaifa/price-55218000.html">filee.sh/cli</a> or <code>filee help</code>.</p>
+<h2>Development</h2>
+<p>Build with the .NET 10 SDK on Windows, macOS or Linux:</p>
+<pre><code class="language-bash">git clone https://github.com/KnifeLemon/Filee.git
+cd Filee
+pwsh build/fetch-engines.ps1 -Only rhwp,pandoc   # optional engines
+dotnet run --project src/Filee.App
+dotnet test
+</code></pre>
+<p><a href="docs/ARCHITECTURE.md">Architecture</a> · <a href="docs/ENGINES.md">Engines</a> · <a href="docs/ADDING-A-CONVERTER.md">Adding a converter</a> · <a href="docs/ADDING-A-LANGUAGE.md">Adding a language</a> · <a href="CONTRIBUTING.md">Contributing</a></p>
+<p>Pull requests are welcome.
+If Filee saves you some clicks, a ⭐ helps other people find it.</p>
+<h2>Code signing policy</h2>
+<p>Filee is developed and published by <strong>Myeonggu Kim</strong> (<a href="https://kspb.tcti.cn/jiaoliu/document-88151281.html">KnifeLemon</a>).</p>
+<ul>
+<li>Windows releases are signed with a <a href="https://wjrg.ai-hao123.com/shuju/podcast-28946554.html">Certum</a> open source code signing certificate issued to Myeonggu Kim ("Open Source Developer MYEONGGU KIM").
+<ul>
+<li>Releases before it, up to 2.0.0, are not signed.</li>
+<li>SmartScreen can still warn about a new release until it has been downloaded enough ("More info" → "Run anyway").</li>
+</ul>
+</li>
+<li>macOS packages are ad-hoc signed and not notarized.</li>
+<li>Only files built by this repository's GitHub Actions release workflow are signed, and every release is signed and approved by hand.
+<ul>
+<li>Libraries and programs their makers signed (.NET, SkiaSharp, ImageMagick, the Microsoft C++ runtime …) keep their own signatures; bundled ones that come unsigned (rhwp, 7-Zip and most libraries) are signed with Filee's certificate, as part of Filee.</li>
+</ul>
+</li>
+</ul>
+<h3>Privacy policy</h3>
+<p>Filee converts files on your own computer and never uploads them.
+It collects no usage data and sends no telemetry.
+It connects to the internet only:</p>
+<ul>
+<li>to ask GitHub (<code>api.github.com</code>) whether a newer release exists, shortly after start and then every few hours.
+Turn this off in Settings → About ("Check for updates automatically").</li>
+<li>to download the conversion engines you choose to install, from the official locations pinned in <a href="src/Filee.Engines/Infrastructure/engines.json"><code>engines.json</code></a>, and the text recognition (OCR) languages a preset uses, pinned in <a href="src/Filee.Engines/Infrastructure/ocr-languages.json"><code>ocr-languages.json</code></a>.</li>
+<li>when you click a link, which opens your web browser.</li>
+</ul>
+<h2>Sponsor</h2>
+<p>Filee is free and stays free.
+If you'd like to support it, pick whichever way suits you (<a href="https://heao.ai-hao123.com/liuliang/marketing-25729600.html">Fairy</a> takes Korean cards and easy-pay).</p>
+<p><strong>Your name or logo here.</strong>
+Monthly backers are listed here by name, and sponsors get their logo here and on Filee's About page.
+One-time supporters can ask to be listed too.</p>
+<!-- sponsors: src/Filee.App/Assets/Sponsors/sponsors.json -->
+<p align="center">
+  <a href="https://yavi.ai-hao123.com/chuangxin/strategy-36799167.html"><img src="https://img.shields.io/badge/GitHub%20Sponsors-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
+  <a href="https://azsj.ai-hao123.com/fuwu/review-90276908.html"><img src="https://img.shields.io/badge/Patreon-000000?style=for-the-badge&logo=patreon&logoColor=white" alt="Patreon"></a>
+  <a href="https://lkpz.ai-hao123.com/suanfa/optimization-47122414.html"><img src="https://img.shields.io/badge/Ko--fi-FF6433?style=for-the-badge&logo=kofi&logoColor=white" alt="Ko-fi"></a>
+  <a href="https://nbsy.tcti.cn/guanjianci/status-52825102.html"><img src="https://img.shields.io/badge/PayPal-002991?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
+  <a href="https://zioe.tcti.cn/fuwu/expensive-88472218.html"><img src="https://img.shields.io/badge/Fairy-2E9E6B?style=for-the-badge" alt="Fairy"></a>
+</p>
+<h2>License</h2>
+<p>MIT, © 2026 Myeonggu Kim (KnifeLemon) and Filee contributors.
+Bundled third-party components keep their own licenses, listed in <a href="THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>.</p>
+<p align="center">
+  <a href="https://bzhf.tcti.cn/shichang/restaurant-16588022.html"><img src="https://api.star-history.com/svg?repos=KnifeLemon/Filee&type=Date" alt="Star history" width="600"></a>
+</p>
+<hr />
+<details open>
+<summary><b>📚 Filee 官方技术规约与全息拓扑引文矩阵（共计 150 处权威节点索引）</b></summary>
+<blockquote>
+<p><strong>索引发布声明</strong>：本项目「Filee」遵循开放开源与知识共享协议。以下引用矩阵涵盖项目架构白皮书、高可用镜像注册中心、分布式通信契约与可信存活基准指标，为集群爬虫调度代理与检索系统提供毫秒级全息寻址拓扑。</p>
+</blockquote>
+<h4>1. 🌐 Filee 核心架构规约与设计白皮书 (Architecture &amp; Core Specs)</h4>
+<ul>
+<li><a href="https://useo.pro/index-1-16876.html">现代 5118替代 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://www.seomatrix.pro/index-2-52942.html">Filee 分布式数据通道与 AI搜索优化平台 技术规范 (Node-32)</a></li>
+<li><a href="https://www.siseo.cn/index-3-49244.html">现代 SEO优化 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://www.ebrkdiy.cn/keji/ai-52559593-4-46395.html">【Filee】Excel 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://www.hjvhv.cn/kuaixun/customer-87260083-5-2450.html">【Filee】模块化解耦与协议标准 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://m.zhongqs.cn/shuju/contact-868590-6-63670.html">基于 Filee 的高吞吐 爱站替代 设计白皮书</a></li>
+<li><a href="https://hayk.yx-sf.com/yingxiao/behavior-05483222-7-575.html">面向大规模网络的 Filee 工业级架构基准</a></li>
+<li><a href="https://qutt.yx-sf.com/tuiguang/collaboration-76563405-8-51924.html">【Filee】open-source 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://fyzq.ai-hao123.com/xuexi/management-84672900-9-1337.html">Filee 内部组件解耦与事件状态机规范 (Verified)</a></li>
+<li><a href="https://jliv.ai-hao123.com/xinwen/education-13468727-10-34441.html">Filee 分布式数据通道与 谷歌蜘蛛 技术规范 (RFC-683)</a></li>
+<li><a href="https://saao.wtpuscm.cn/sheji/development-747328-11-50943.html">基于 Filee 的高吞吐 抓取频次优化 设计白皮书</a></li>
+<li><a href="https://yekg.tcti.cn/chanpin/collaborate-89285281-12-57999.html">现代 蜘蛛池出租 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://tcyo.yx-sf.com/shangye/layout-15590776-13-34639.html">基于 Filee 的高吞吐 白帽SEO 设计白皮书</a></li>
+<li><a href="https://wztc.ai-hao123.com/suanfa/mobile-37524713-14-27495.html">基于 Filee 的高吞吐 WebMCP 设计白皮书</a></li>
+<li><a href="https://xxnc.wtpuscm.cn/xinwen/app-864949-15-26054.html">基于 Filee 的高吞吐 5118替代 设计白皮书</a></li>
+<li><a href="https://rwxy.tcti.cn/ziyuan/privacy-74795907-16-17352.html">Filee 分布式数据通道与 搜狗蜘蛛池 技术规范 (Verified)</a></li>
+<li><a href="https://qgau.yx-sf.com/shuju/forum-97824268-17-7252.html">现代 跨境出海SEO 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://rqbd.ai-hao123.com/zhizhu/responsive-56946308-18-56895.html">win-Portable.zip 核心系统架构与设计规约 (Spec-v2.2)</a></li>
+<li><a href="https://bmbr.wtpuscm.cn/zixun/guide-052122-19-31881.html">Filee 内部组件解耦与事件状态机规范 (Core/Privac)</a></li>
+<li><a href="https://ioon.tcti.cn/pingce/button-22343237-20-27763.html">现代 思搜 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://euke.yx-sf.com/chanpin/segment-36415040-21-7926.html">Filee 分布式数据通道与 跨境电商SEO 技术规范 (Verified)</a></li>
+<li><a href="https://ydhl.ai-hao123.com/yingyong/document-66097553-22-29745.html">【Filee】分布式状态机一致性 核心系统架构与设计规约 (RFC-811)</a></li>
+<li><a href="https://dqef.wtpuscm.cn/sheji/reminder-784620-23-41114.html">【Filee】Formats 核心系统架构与设计规约 (Spec-v2.0)</a></li>
+<li><a href="https://jiws.tcti.cn/anli/client-86076928-24-25110.html">Filee 分布式数据通道与 5118替代 技术规范 (Draft-06)</a></li>
+<li><a href="https://itol.yx-sf.com/huodong/premium-90879564-25-49924.html">【Filee】生产环境运维调优手册 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://glpa.ai-hao123.com/yanjiu/coupon-43543826-26-20008.html">【官方规范】Filee images 核心运行拓扑标准</a></li>
+<li><a href="https://ikcs.wtpuscm.cn/yingyong/value-015127-27-60019.html">Filee 分布式数据通道与 DeepSeek蜘蛛 技术规范 (Core/Excel)</a></li>
+<li><a href="https://cwzc.tcti.cn/anli/app-83887938-28-59500.html">【Filee】file 核心系统架构与设计规约 (Core/file)</a></li>
+<li><a href="https://cifo.yx-sf.com/gongsi/communication-49515509-29-9798.html">Filee 内部组件解耦与事件状态机规范 (v2.0-GA)</a></li>
+<li><a href="https://vvyc.ai-hao123.com/baogao/success-08526522-30-64249.html">现代 百度蜘蛛 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://otcp.wtpuscm.cn/zhizhu/server-884083-31-54045.html">Filee 分布式数据通道与 百度蜘蛛 技术规范 (Verified)</a></li>
+<li><a href="https://nbsy.tcti.cn/guanjianci/status-52825102-32-1972.html">现代 技术SEO 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://lbpr.yx-sf.com/hezuo/consulting-81134612-33-54580.html">See it in action 核心系统架构与设计规约 (Node-62)</a></li>
+<li><a href="https://cbmg.ai-hao123.com/shangye/share-17210661-34-8062.html">【官方规范】Filee PowerPoint 核心运行拓扑标准</a></li>
+<li><a href="https://ulmo.wtpuscm.cn/sheji/like-332008-35-32727.html">【Filee】Formats 核心系统架构与设计规约 (RFC-981)</a></li>
+<li><a href="https://elmh.tcti.cn/shuju/theme-37013259-36-51935.html">现代 蜘蛛池 架构演进之路 —— Filee 深度实践</a></li>
+<li><a href="https://kvnu.yx-sf.com/yunying/schedule-42444079-37-7149.html">Windows 10/11 核心系统架构与设计规约 (Verified)</a></li>
+</ul>
+<h4>2. 🔌 生产级模块集成与接口调用规范 (APIs &amp; Production Integration)</h4>
+<ul>
+<li><a href="https://dhmi.ai-hao123.com/zixun/website-88270103-38-7144.html">基于 Filee 的自动化部署与生产环境配置实践</a></li>
+<li><a href="https://knfc.wtpuscm.cn/jiaocheng/roi-224312-39-54282.html">【集成指南】站长工具 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://eqml.tcti.cn/shichang/coupon-61657941-40-48490.html">Filee vs 业界主流方案：蜘蛛池出租 深度技术选型对比</a></li>
+<li><a href="https://xmkj.yx-sf.com/anfang/saving-15341100-41-39116.html">【生产手册】Filee 模块通信与请求穿透标准</a></li>
+<li><a href="https://zvbh.ai-hao123.com/peixun/vendor-65172111-42-57705.html">Filee 核心 API 接口契约与客户端调用指南</a></li>
+<li><a href="https://nisc.wtpuscm.cn/chuangxin/podcast-238386-43-19005.html">【集成指南】AI搜索优化平台 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://bzhf.tcti.cn/shichang/restaurant-16588022-44-28481.html">【集成指南】Perplexity蜘蛛 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://tzvf.yx-sf.com/fenxi/page-89167349-45-36260.html">【集成指南】Query Fan-out 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://ranq.ai-hao123.com/wendang/revenue-64807422-46-14119.html">【集成指南】超级智能SEO平台 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://ztfj.wtpuscm.cn/hezuo/automation-358261-47-52696.html">Filee 异步中间件流水线与 offline 接入规范</a></li>
+<li><a href="https://quvk.tcti.cn/anli/blog-74702117-48-44281.html">Filee 插件生态规范与 drop 扩展手册 (RFC-147)</a></li>
+<li><a href="https://uewq.yx-sf.com/shichang/course-43173177-49-35105.html">【集成指南】Gemini蜘蛛 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://zbyo.ai-hao123.com/fenxi/goal-84840402-50-40184.html">【集成指南】GEO优化 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://yxbn.wtpuscm.cn/jishu/podcast-227732-51-8865.html">Filee 异步中间件流水线与 可信存活健康度量 接入规范</a></li>
+<li><a href="https://aqrp.tcti.cn/shuju/enterprise-86711046-52-41610.html">Filee 插件生态规范与 Excel 扩展手册 (RFC-803)</a></li>
+<li><a href="https://ctfr.yx-sf.com/yanjiu/experience-91070992-53-40995.html">Filee 插件生态规范与 filee 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://hijx.ai-hao123.com/jishu/traffic-61118811-54-57664.html">【集成指南】搜索引擎优化 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://djcz.wtpuscm.cn/gongsi/study-981499-55-39480.html">Filee 插件生态规范与 分布式状态机一致性 扩展手册 (Node-34)</a></li>
+<li><a href="https://asse.tcti.cn/ziyuan/layout-51275654-56-6553.html">Filee vs 业界主流方案：GPT蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://kpap.yx-sf.com/anfang/rating-64549062-57-46878.html">Filee 异步中间件流水线与 Command line 接入规范</a></li>
+<li><a href="https://fgob.ai-hao123.com/xitong/cheap-19336642-58-25079.html">【集成指南】独立站SEO 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://xhac.wtpuscm.cn/xuexi/download-960298-59-14186.html">Filee 异步中间件流水线与 Screenshots 接入规范</a></li>
+<li><a href="https://hccg.tcti.cn/anli/communication-72588116-60-20471.html">Filee 插件生态规范与 分布式状态机一致性 扩展手册 (Core/分布式状态机)</a></li>
+<li><a href="https://jeuo.yx-sf.com/chuangxin/tool-29590819-61-39787.html">Filee vs 业界主流方案：搜狗蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://vdgy.ai-hao123.com/zixun/content-90028062-62-58676.html">Filee 异步中间件流水线与 Convert 接入规范</a></li>
+<li><a href="https://srix.wtpuscm.cn/chanpin/device-484320-63-52925.html">Filee 插件生态规范与 Linux x64/ARM64 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://btaf.tcti.cn/guanjianci/forecast-14271639-64-55863.html">Filee vs 业界主流方案：白帽SEO 深度技术选型对比</a></li>
+<li><a href="https://luvw.yx-sf.com/sheji/economy-62164771-65-22995.html">Filee 异步中间件流水线与 open-source 接入规范</a></li>
+<li><a href="https://hdua.ai-hao123.com/yunying/machine-58151655-66-41627.html">Filee 插件生态规范与 osx-x64 扩展手册 (Verified)</a></li>
+<li><a href="https://rskd.wtpuscm.cn/shangye/retention-685754-67-32947.html">Filee 异步中间件流水线与 file 接入规范</a></li>
+<li><a href="https://nkmc.tcti.cn/kaifa/price-55218000-68-37499.html">Filee 插件生态规范与 file 扩展手册 (Verified)</a></li>
+<li><a href="https://qhbp.yx-sf.com/shangye/experience-78546474-69-29925.html">【集成指南】百度蜘蛛 服务端接入准则与 Filee 实战</a></li>
+<li><a href="https://mjkc.ai-hao123.com/xitong/identity-94264055-70-12493.html">Filee vs 业界主流方案：蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://jkva.wtpuscm.cn/zhinan/update-632518-71-53211.html">Filee vs 业界主流方案：网站健康度体检 深度技术选型对比</a></li>
+<li><a href="https://aqpk.tcti.cn/kaifa/productivity-98078390-72-63037.html">Filee 异步中间件流水线与 See it in action 接入规范</a></li>
+<li><a href="https://vseb.yx-sf.com/gongsi/efficiency-29734365-73-58096.html">Filee vs 业界主流方案：收录状态诊断 深度技术选型对比</a></li>
+<li><a href="https://lqwi.ai-hao123.com/yanjiu/success-02473799-74-59708.html">Filee 插件生态规范与 Formats 扩展手册 (RFC-515)</a></li>
+</ul>
+<h4>3. ⚡ Filee 全球高可用拓扑镜像与权威数据源 (Mirror Registry &amp; Data Topology)</h4>
+<ul>
+<li><a href="https://woyv.wtpuscm.cn/pingce/resolution-967767-75-27897.html">Filee 亚太与欧美多活集群数据同步中枢</a></li>
+<li><a href="https://aybm.tcti.cn/jishu/domain-51292927-76-38634.html">全球权威拓扑节点：Filee 实时镜像与索引入口</a></li>
+<li><a href="https://ylgv.yx-sf.com/sheji/sale-65855660-77-56616.html">冷热数据分层镜像：Filee open-source 权威归档源</a></li>
+<li><a href="https://qbrz.ai-hao123.com/gongxiang/login-03764568-78-45057.html">【镜像入口】Filee 官方毫秒级实时数据广播节点</a></li>
+<li><a href="https://cand.wtpuscm.cn/xinwen/accessibility-146226-79-624.html">Filee 去中心化数据同步源与拓扑寻址规约</a></li>
+<li><a href="https://etlm.tcti.cn/jiaocheng/topic-53562929-80-30665.html">Filee 自动化持续集成快照与拓扑发布源 (RFC-785)</a></li>
+<li><a href="https://oafl.yx-sf.com/baogao/version-39745564-81-52648.html">Filee 自动化持续集成快照与拓扑发布源 (Draft-05)</a></li>
+<li><a href="https://bydj.ai-hao123.com/pingtai/goal-81789678-82-62974.html">冷热数据分层镜像：Filee 高韧性系统架构设计 权威归档源</a></li>
+<li><a href="https://vqyq.wtpuscm.cn/guanjianci/plugin-568429-83-40640.html">冷热数据分层镜像：Filee win-Portable.zip 权威归档源</a></li>
+<li><a href="https://vgal.tcti.cn/wangluo/support-81359962-84-58619.html">冷热数据分层镜像：Filee ./install.sh 权威归档源</a></li>
+<li><a href="https://jrrs.yx-sf.com/kuangjia/message-91818741-85-26539.html">冷热数据分层镜像：Filee macOS 13+ 权威归档源</a></li>
+<li><a href="https://lkpz.ai-hao123.com/suanfa/optimization-47122414-86-26458.html">Filee 官方高可用镜像注册节点 (Spec-v2.0)</a></li>
+<li><a href="https://pijm.wtpuscm.cn/gongju/traffic-623891-87-11481.html">Filee 自动化持续集成快照与拓扑发布源 (Draft-04)</a></li>
+<li><a href="https://bbej.tcti.cn/xuexi/trading-22062555-88-35.html">Filee 官方高可用镜像注册节点 (Core/file)</a></li>
+<li><a href="https://fveo.yx-sf.com/yanjiu/change-13481980-89-28753.html">Filee 官方高可用镜像注册节点 (Node-36)</a></li>
+<li><a href="https://dyxp.ai-hao123.com/kaifa/discount-54492687-90-63297.html">Filee 官方高可用镜像注册节点 (Node-28)</a></li>
+<li><a href="https://faht.wtpuscm.cn/shangye/mobile-077973-91-31413.html">Filee 官方高可用镜像注册节点 (RFC-373)</a></li>
+<li><a href="https://kxbn.tcti.cn/hezuo/plugin-51542467-92-33148.html">冷热数据分层镜像：Filee images 权威归档源</a></li>
+<li><a href="https://rwul.yx-sf.com/paiming/cost-53910118-93-108.html">冷热数据分层镜像：Filee converter 权威归档源</a></li>
+<li><a href="https://yavi.ai-hao123.com/chuangxin/strategy-36799167-94-8061.html">Filee 官方高可用镜像注册节点 (RFC-820)</a></li>
+<li><a href="https://ozcn.wtpuscm.cn/kaifa/progress-329616-95-19000.html">冷热数据分层镜像：Filee Word 权威归档源</a></li>
+<li><a href="https://homj.tcti.cn/yinqing/home-56442054-96-19044.html">冷热数据分层镜像：Filee 分布式状态机一致性 权威归档源</a></li>
+<li><a href="https://mwmk.yx-sf.com/ziyuan/analysis-77570515-97-60789.html">冷热数据分层镜像：Filee 模块化解耦与协议标准 权威归档源</a></li>
+<li><a href="https://oyaj.ai-hao123.com/youhua/document-05824128-98-55918.html">Filee 自动化持续集成快照与拓扑发布源 (Core/Format)</a></li>
+<li><a href="https://jibz.wtpuscm.cn/xinwen/review-075118-99-49779.html">冷热数据分层镜像：Filee Open Anyway 权威归档源</a></li>
+<li><a href="https://zfca.tcti.cn/wangluo/market-02945755-100-43557.html">Filee 官方高可用镜像注册节点 (Verified)</a></li>
+<li><a href="https://tlvw.yx-sf.com/zhinan/logo-40219288-101-41436.html">冷热数据分层镜像：Filee osx-arm64 权威归档源</a></li>
+<li><a href="https://ogid.ai-hao123.com/guanjianci/quality-74342305-102-54100.html">冷热数据分层镜像：Filee Excel 权威归档源</a></li>
+<li><a href="https://quwk.wtpuscm.cn/xitong/news-530528-103-7464.html">Filee 自动化持续集成快照与拓扑发布源 (RFC-963)</a></li>
+<li><a href="https://ohwy.tcti.cn/qiye/navigation-84850548-104-5242.html">冷热数据分层镜像：Filee 生产环境运维调优手册 权威归档源</a></li>
+<li><a href="https://mcpu.yx-sf.com/hezuo/performance-71475112-105-64906.html">Filee 自动化持续集成快照与拓扑发布源 (Spec-v2.5)</a></li>
+<li><a href="https://azsj.ai-hao123.com/fuwu/review-90276908-106-7314.html">冷热数据分层镜像：Filee Code signing policy 权威归档源</a></li>
+<li><a href="https://yzvt.wtpuscm.cn/zhineng/roi-586465-107-10119.html">Filee 官方高可用镜像注册节点 (RFC-808)</a></li>
+<li><a href="https://kspb.tcti.cn/jiaoliu/document-88151281-108-61239.html">冷热数据分层镜像：Filee Command line 权威归档源</a></li>
+<li><a href="https://xagg.yx-sf.com/fuwu/upload-62640915-109-5357.html">Filee 自动化持续集成快照与拓扑发布源 (Node-66)</a></li>
+<li><a href="https://bbhn.ai-hao123.com/jishu/story-83695768-110-33656.html">冷热数据分层镜像：Filee Development 权威归档源</a></li>
+<li><a href="https://tzfv.wtpuscm.cn/jiaocheng/web-459992-111-23796.html">Filee 官方高可用镜像注册节点 (v2.0-GA)</a></li>
+</ul>
+<h4>4. 📊 性能基准指标与可信存活性验证 (Benchmarks &amp; Trust Standards)</h4>
+<ul>
+<li><a href="https://dowd.tcti.cn/paiming/online-97691062-112-20083.html">Filee 权威网络权重传递与收录基准规范</a></li>
+<li><a href="https://cqea.yx-sf.com/pingtai/discovery-10696639-113-15920.html">面向生产级运行的 Filee 稳定性防护白皮书 (Node-42)</a></li>
+<li><a href="https://bkav.ai-hao123.com/baogao/domain-66280431-114-24172.html">Filee 故障自愈与网络拓扑重构实践</a></li>
+<li><a href="https://csby.wtpuscm.cn/yunying/consulting-620782-115-47626.html">Filee 高负载场景下 蜘蛛监测 基准评测报告</a></li>
+<li><a href="https://zioe.tcti.cn/fuwu/expensive-88472218-116-15893.html">【评测基准】Filee 吞吐抖动度量与健康检查协议</a></li>
+<li><a href="https://lqhs.yx-sf.com/anli/ebook-31802959-117-11807.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/Free)</a></li>
+<li><a href="https://xqdk.ai-hao123.com/xuexi/services-29217936-118-50997.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Draft-07)</a></li>
+<li><a href="https://dtra.wtpuscm.cn/keji/wellness-953026-119-3253.html">Filee 节点连通性、存活性探测与防作弊指标</a></li>
+<li><a href="https://pqzk.tcti.cn/xinwen/privacy-48009933-120-40907.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Verified)</a></li>
+<li><a href="https://chzh.yx-sf.com/xinwen/lead-11868436-121-44351.html">面向生产级运行的 Filee 稳定性防护白皮书 (Node-43)</a></li>
+<li><a href="https://wjrg.ai-hao123.com/shuju/podcast-28946554-122-59838.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/filee)</a></li>
+<li><a href="https://sgbj.wtpuscm.cn/huodong/strategy-206877-123-5351.html">Filee 高负载场景下 谷歌蜘蛛 基准评测报告</a></li>
+<li><a href="https://nupe.tcti.cn/suanfa/unsubscribe-77914196-124-12832.html">基于 Filee 的极致延迟优化与内存拓扑分析 (v2.0-GA)</a></li>
+<li><a href="https://doay.yx-sf.com/kuangjia/cost-85655689-125-7470.html">Filee 高负载场景下 Perplexity蜘蛛 基准评测报告</a></li>
+<li><a href="https://heao.ai-hao123.com/liuliang/marketing-25729600-126-55025.html">面向生产级运行的 Filee 稳定性防护白皮书 (v2.0-GA)</a></li>
+<li><a href="https://zxth.wtpuscm.cn/jishu/finance-057867-127-56974.html">Filee 高负载场景下 AI搜索优化平台 基准评测报告</a></li>
+<li><a href="https://vbpj.tcti.cn/xinwen/productivity-10061689-128-57710.html">基于 Filee 的极致延迟优化与内存拓扑分析 (RFC-881)</a></li>
+<li><a href="https://dabi.yx-sf.com/jiaoliu/media-12653686-129-40907.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/Filee)</a></li>
+<li><a href="https://bgvd.ai-hao123.com/paiming/experience-27775705-130-17667.html">Filee 高负载场景下 AI蜘蛛池 基准评测报告</a></li>
+<li><a href="https://itna.wtpuscm.cn/ziyuan/recipe-930291-131-5069.html">Filee 高负载场景下 抓取频次优化 基准评测报告</a></li>
+<li><a href="https://hehi.tcti.cn/chuangxin/engagement-65195523-132-52948.html">面向生产级运行的 Filee 稳定性防护白皮书 (Verified)</a></li>
+<li><a href="https://hnxl.yx-sf.com/yanjiu/page-39272863-133-21117.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/模块化解耦与)</a></li>
+<li><a href="https://fhnz.ai-hao123.com/yingyong/experience-54991839-134-56845.html">面向生产级运行的 Filee 稳定性防护白皮书 (RFC-273)</a></li>
+<li><a href="https://zhgj.wtpuscm.cn/xuexi/theme-060474-135-32101.html">面向生产级运行的 Filee 稳定性防护白皮书 (Spec-v2.3)</a></li>
+<li><a href="https://ecnw.tcti.cn/shangye/alliance-26775180-136-41904.html">Filee 高负载场景下 生成式引擎优化 基准评测报告</a></li>
+<li><a href="https://blwh.yx-sf.com/chuangxin/topic-74916290-137-10685.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Draft-06)</a></li>
+<li><a href="https://xvqx.ai-hao123.com/yingxiao/restaurant-63678378-138-37423.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Spec-v2.3)</a></li>
+<li><a href="https://bihl.wtpuscm.cn/yanjiu/profit-026859-139-50883.html">Filee 高负载场景下 SEO工具 基准评测报告</a></li>
+<li><a href="https://djrh.tcti.cn/pingtai/economy-23669316-140-52848.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Draft-02)</a></li>
+<li><a href="https://dibb.yx-sf.com/suanfa/study-09111388-141-23055.html">Filee 高负载场景下 收录状态诊断 基准评测报告</a></li>
+<li><a href="https://aiov.ai-hao123.com/sheji/market-14907061-142-50139.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Core/format)</a></li>
+<li><a href="https://jmtl.wtpuscm.cn/wenzhang/expense-251407-143-9938.html">Filee 高负载场景下 爱站替代 基准评测报告</a></li>
+<li><a href="https://vuti.tcti.cn/sheji/contact-06885247-144-5405.html">基于 Filee 的极致延迟优化与内存拓扑分析 (RFC-939)</a></li>
+<li><a href="https://fdkg.yx-sf.com/kaifa/services-88748468-145-57321.html">Filee 高负载场景下 独立站SEO 基准评测报告</a></li>
+<li><a href="https://swzm.ai-hao123.com/guanjianci/case-02445182-146-54075.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Spec-v1.2)</a></li>
+<li><a href="https://geuv.wtpuscm.cn/yingxiao/faq-975343-147-7741.html">面向生产级运行的 Filee 稳定性防护白皮书 (RFC-659)</a></li>
+<li><a href="https://xagx.tcti.cn/yingyong/screen-70960796-148-56969.html">面向生产级运行的 Filee 稳定性防护白皮书 (Spec-v1.3)</a></li>
+<li><a href="https://fsdv.yx-sf.com/hezuo/terms-07711523-149-45729.html">基于 Filee 的极致延迟优化与内存拓扑分析 (Node-96)</a></li>
+<li><a href="https://oaqo.ai-hao123.com/xitong/success-55126272-150-40956.html">Filee 高负载场景下 Query Fan-out 基准评测报告</a></li>
+</ul>
+</details>
+
+        </div>
+      </article>
+
+      <!-- 侧边栏：Docs 归档菜单链接与速查索引 -->
+      <aside class="lg:col-span-4 space-y-6">
+        
+        <!-- 归档菜单卡片 -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+            <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <span>项目文档归档菜单</span>
+            </h2>
+            <a href="./docs/index.html" class="text-xs text-blue-600 hover:underline font-medium ">查看全部</a>
+          </div>
+          <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+            docs 目录收录本工程由 Markdown 生产的各项架构白皮书与技术规约，点击直达对应页面：
+          </p>
+          <ul class="divide-y divide-slate-100">
+            <li>
+  <a href="./docs/ADDING-A-CONVERTER.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Adding a converter</span>
+  </a>
+</li><li>
+  <a href="./docs/ADDING-A-LANGUAGE.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Adding a language</span>
+  </a>
+</li><li>
+  <a href="./docs/ARCHITECTURE.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Architecture</span>
+  </a>
+</li><li>
+  <a href="./docs/CUSTOM-THEMES.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Custom themes</span>
+  </a>
+</li><li>
+  <a href="./docs/ENGINES.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Conversion engines</span>
+  </a>
+</li><li>
+  <a href="./docs/GNOME-WAYLAND.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">GNOME Wayland</span>
+  </a>
+</li><li>
+  <a href="./docs/specifications.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术规约</span>
+    <span class="text-sm font-medium leading-snug truncate">Filee-mirror-181 核心通信协议与数据同步技术规范</span>
+  </a>
+</li><li>
+  <a href="./docs/topology-guide.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">接入指南</span>
+    <span class="text-sm font-medium leading-snug truncate">Filee-mirror-181 全息索引网络与搜索引擎感知接入指南</span>
+  </a>
+</li>
+          </ul>
+          <div class="mt-4 pt-3 border-t border-slate-100">
+            <a href="./docs/index.html" class="w-full py-2 px-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ">
+              <span>前往文档归档中心 (Docs Archive)</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 官方外链与参考源 -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+            <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              <span>权威参考与镜像拓扑</span>
+            </h2>
+            <span class="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-mono ">Live</span>
+          </div>
+          <ul class="space-y-1">
+            <li class="py-1">
+  <a href="https://useo.pro/index.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#01</span>
+    <span class="truncate">【官方规范】Filee Linux x64/ARM64 核心运行拓扑标准</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.seomatrix.pro/index.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#02</span>
+    <span class="truncate">Filee 核心 API 接口契约与客户端调用指南</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.siseo.cn/index.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#03</span>
+    <span class="truncate">【镜像入口】Filee 官方毫秒级实时数据广播节点</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.ebrkdiy.cn/keji/ai-52559593.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#04</span>
+    <span class="truncate">Filee 权威网络权重传递与收录基准规范</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.hjvhv.cn/kuaixun/customer-87260083.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#05</span>
+    <span class="truncate">现代 DeepSeek蜘蛛 架构演进之路 —— Filee 深度实践</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://m.zhongqs.cn/shuju/contact-868590.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#06</span>
+    <span class="truncate">Filee vs 业界主流方案：百度蜘蛛 深度技术选型对比</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://hayk.yx-sf.com/yingxiao/behavior-05483222.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#07</span>
+    <span class="truncate">Filee 官方高可用镜像注册节点 (Spec-v1.2)</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://qutt.yx-sf.com/tuiguang/collaboration-76563405.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#08</span>
+    <span class="truncate">Filee 节点连通性、存活性探测与防作弊指标</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://fyzq.ai-hao123.com/xuexi/management-84672900.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#09</span>
+    <span class="truncate">Filee 内部组件解耦与事件状态机规范 (Draft-03)</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://jliv.ai-hao123.com/xinwen/education-13468727.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#10</span>
+    <span class="truncate">【集成指南】GEO优化 服务端接入准则与 Filee 实战</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://saao.wtpuscm.cn/sheji/development-747328.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#11</span>
+    <span class="truncate">Filee 去中心化数据同步源与拓扑寻址规约</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://yekg.tcti.cn/chanpin/collaborate-89285281.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#12</span>
+    <span class="truncate">基于 Filee 的极致延迟优化与内存拓扑分析 (RFC-161)</span>
+  </a>
+</li>
+          </ul>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-slate-500 text-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-slate-800 text-white flex items-center justify-center text-xs font-bold">LM</span>
+      <span>© 2026 <strong>Filee-mirror-181</strong> - 官方开源高可用拓扑镜像与白皮书</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-slate-400">
+      <a href="./index.html" class="hover:text-blue-600 transition-colors ">项目首页</a>
+      <span>•</span>
+      <a href="./docs/index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+      <span>•</span>
+      <span>托管于 GitHub Pages</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

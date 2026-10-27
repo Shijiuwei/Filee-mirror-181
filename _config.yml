@@ -1,0 +1,5 @@
+title: "Filee-mirror-181"
+description: "High availability mirror and network topology specifications for KnifeLemon/Filee"
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-relative-links
